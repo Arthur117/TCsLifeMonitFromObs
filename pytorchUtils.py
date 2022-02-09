@@ -11,21 +11,22 @@ import pytorch_lightning as pl
 
 class LSTM1(nn.Module):
     '''
-    LSTM for 02_lstm_dynamic_pred_ibtracsv01.ipynb
+    LSTM for 02_lstm_dynamic_pred_ibtracsv01.ipynb and _ibtracsv01.ipynb
     1 timestamp only, and n_features = 20.
     '''
-    def __init__(self, num_classes=5, input_size=5, hidden_size=2, num_layers=1, seq_len=4):
+    def __init__(self, num_classes=5, input_size=5, hidden_size=2, num_layers=1, seq_len=4, dropout=0):
         super(LSTM1, self).__init__()
         self.num_classes = num_classes # number of classes
         self.num_layers  = num_layers  # number of layers
         self.input_size  = input_size  # input size
         self.hidden_size = hidden_size # hidden state
         self.seq_len     = seq_len     # sequence length
+        self.dropout     = dropout
 
         self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
-                            num_layers=num_layers, batch_first=True) # lstm
-        self.fc_1 =  nn.Linear(hidden_size, 128)                     # fully connected 1
-        self.fc   = nn.Linear(128, num_classes)                      # fully connected last layer
+                            num_layers=num_layers, batch_first=True, dropout=dropout) # lstm
+        self.fc_1 =  nn.Linear(hidden_size, 128)                                      # fully connected 1
+        self.fc   = nn.Linear(128, num_classes)                                       # fully connected last layer
 
         self.relu = nn.ReLU()
     
@@ -34,6 +35,7 @@ class LSTM1(nn.Module):
         c_0 = Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_size)).to(x.device.type) # internal state
         # Propagate input through LSTM
         output, (hn, cn) = self.lstm(x, (h_0, c_0)) # lstm with input, hidden, and internal state
+        hn  = hn[self.num_layers - 1, :, :]
         hn  = hn.view(-1, self.hidden_size) # reshaping the data for Dense layer next
         out = self.relu(hn)
         out = self.fc_1(out) # first Dense
@@ -41,38 +43,46 @@ class LSTM1(nn.Module):
         out = self.fc(out)   # final Output
         return out
     
-class LSTM2(nn.Module):
+class MLP(nn.Module):
     '''
-    LSTM for 02_lstm_dynamic_pred_ibtracsv02.ipynb
-    Several timestamps, for instance 4 timestamps with n_features=5.
+    Multilayer Perceptron.
     '''
-    def __init__(self, n_features=5, input_size=5, hidden_size=2, num_layers=1, seq_len=4):
-        super(LSTM2, self).__init__()
-        self.num_classes = num_classes # number of classes
-        self.n_features  = n_features  # number of layers
+    def __init__(self, input_size=5, seq_len=4, output_size=1):
+        super().__init__()
         self.input_size  = input_size  # input size
-        self.hidden_size = hidden_size # hidden state
         self.seq_len     = seq_len     # sequence length
-
-        self.lstm = nn.LSTM(input_size=input_size, hidden_size=hidden_size,
-                            num_layers=num_layers, batch_first=True) # lstm
-        self.fc_1 = nn.Linear(hidden_size, 128)                      # fully connected 1
-        self.fc   = nn.Linear(128, n_features)                       # fully connected last layer
-
-        self.relu = nn.ReLU()
-    
+        self.output_size = output_size # output size
+        
+        self.layers = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(self.input_size * self.seq_len, 20),
+            nn.ReLU(),
+            nn.Linear(20, 10),
+            nn.ReLU(),
+            nn.Linear(10, 1)
+            )
+        
     def forward(self, x):
-        h_0 = Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_size)).to(x.device.type) # hidden state
-        c_0 = Variable(torch.zeros(self.num_layers, x.size(0), self.hidden_size)).to(x.device.type) # internal state
-        # Propagate input through LSTM
-        output, (hn, cn) = self.lstm(x, (h_0, c_0)) # lstm with input, hidden, and internal state
-        hn  = hn.view(-1, self.hidden_size) # reshaping the data for Dense layer next
-        out = self.relu(hn)
-        out = self.fc_1(out) # first Dense
-        out = self.relu(out) # relu
-        out = self.fc(out)   # final Output
-        return out
-
+        return self.layers(x)
+    
+class LinearRegression(nn.Module):
+    '''
+    Linear Regression.
+    '''
+    def __init__(self, input_size=5, seq_len=4, output_size=1):
+        super().__init__()
+        self.input_size  = input_size  # input size
+        self.seq_len     = seq_len     # sequence length
+        self.output_size = output_size # output size
+        
+        self.lin = nn.Sequential(
+            nn.Flatten(),
+            nn.Linear(self.input_size * self.seq_len, self.output_size)
+        )
+        
+    def forward(self, x):
+        return self.lin(x)
+    
 class ShortTimeseriesDataset(Dataset):   
     '''
     Short Timeseries Dataset. 
@@ -82,18 +92,23 @@ class ShortTimeseriesDataset(Dataset):
       of `(batch_size, seq_len, n_features)` shape.
     Suitable as an input to RNNs or LSTMs. 
     '''
-    def __init__(self, X: xr.Dataset, y: np.ndarray, n_features: int=5, seq_len: int=4):
+    def __init__(self, X: xr.Dataset, y: np.ndarray, n_features: int=5, seq_len: int=4, device: str='cpu'):
         self.X          = torch.tensor(X).float()
         self.y          = torch.tensor(y).float()
         self.n_features = n_features
         self.seq_len    = seq_len
+        self.device     = device
 
     def __len__(self):
         return len(self.X)
 
     def __getitem__(self, i):
+        # Select data
         input_tensor  = torch.transpose(self.X[i, :].reshape(self.n_features, self.seq_len), 0, 1)
         target_tensor = self.y[i]
+        # Move to GPU if available
+        input_tensor  = input_tensor.to(self.device)
+        target_tensor = target_tensor.to(self.device)
         return input_tensor, target_tensor
 
 class ShortTermPredDataModule(pl.LightningDataModule):
