@@ -64,6 +64,7 @@ class MLP(nn.Module):
         
     def forward(self, x):
         return self.layers(x)
+
     
 class LinearRegression(nn.Module):
     '''
@@ -110,6 +111,31 @@ class ShortTimeseriesDataset(Dataset):
         input_tensor  = input_tensor.to(self.device)
         target_tensor = target_tensor.to(self.device)
         return input_tensor, target_tensor
+    
+class CompleteTimeseriesDataset(Dataset):   
+    '''
+    Complete Timeseries Dataset.
+    Checks that usa_rmw is contains at least a 5-days sequence of non NaN values.
+    In that case, fills the NaN values with 0 padding, for every variable.
+    '''
+    def __init__(self, X: np.ndarray, y: np.ndarray,  device: str='cpu'):
+        self.X          = torch.tensor(X).float()
+        self.y          = torch.tensor(y).float()
+        self.device     = device
+
+    def __len__(self):
+        return len(self.X)
+
+    def __getitem__(self, i):
+        # Select data & Move to GPU if available
+        input_tensor  = self.X[i, :, :].to(self.device)
+        target_tensor = self.y[i, 0, :].to(self.device)
+        return input_tensor, target_tensor
+
+    
+    
+    
+###
 
 class ShortTermPredDataModule(pl.LightningDataModule):
     '''

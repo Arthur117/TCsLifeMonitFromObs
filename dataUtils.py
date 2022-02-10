@@ -1,5 +1,7 @@
 from tqdm import tqdm
 import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
 
 ### DATA UTILS
 
@@ -36,8 +38,44 @@ def create_dataset(ds_ibt, params_of_interest, PARAMS):
     
     return X, y
 
+def get_X_and_y_arrays_from_Dataset(ds_ibt, input_variables, target_variable):
+    '''
+    Given a xarray.Dataset ds_ibt of storms and sequences (e.g dim= date_time) of variables of interest,
+    returns an input X and a target y in np.array format.
+    These can be passed as input of the CompleteTimeseriesDataset(Dataset) class.
+    '''
+    X = np.array(list(ds_ibt[input_variables].data_vars.values()))
+    X = np.reshape(X, (X.shape[1], X.shape[0], X.shape[2])) # shape (n_storms, n_features, date_time) = (115, 4, 360)
+    y = np.array(list(ds_ibt[target_variable].data_vars.values()))
+    y = np.reshape(y, (y.shape[1], y.shape[0], y.shape[2])) # shape (n_storms, n_features, date_time) = (115, 1, 360)
+    return X, y
+
 def rmse(preds, targets):
     return np.sqrt(np.mean((preds - targets) ** 2))
 
 def inverse_scale_normalize(X, MU, SIG, SCALE, param):
     return MU[param] + X * (SIG[param] / SCALE[param])
+
+def save_ibt_sample(ds, path, params_of_interest=['usa_lon', 'usa_lat', 'usa_wind', 'usa_r34', 'usa_rmw']):
+    fig, axs = plt.subplots(nrows=3, ncols=2, figsize=(25, 25))
+
+    for i, ax in enumerate(fig.axes[:-1]):
+        param = params_of_interest[i]
+        ax.set_title(param, weight='bold')
+        ax.plot(ds[param]);ax.grid()
+
+    ax  = fig.axes[-1]
+    if ds['name'].values.shape:
+        idx = np.where(~pd.isnull(ds['name'].values))[0][0]
+        ax.text(0.02, 0.95, str(ds['name'].values[idx])[2:-1], weight='bold')
+        idx = np.where(~pd.isnull(ds['sid'].values))[0][0]
+        ax.text(0.02, 0.88, 'SID  = %s'%str(ds['sid'].values[idx])[2:-1])
+        ax.text(0.02, 0.81, 'YEAR = %s'%(str(ds['time'].values[0])[:4]))
+    else:
+        ax.text(0.02, 0.95, str(ds['name'].values)[2:-1], weight='bold')
+        ax.text(0.02, 0.88, 'SID  = %s'%str(ds['sid'].values)[2:-1])
+        ax.text(0.02, 0.81, 'YEAR = %s'%(str(ds['time'].values[0])[:4]))
+    
+    plt.savefig(path)
+    plt.clf()
+
