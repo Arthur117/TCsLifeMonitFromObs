@@ -52,7 +52,7 @@ def create_Xt_1_and_Xt(ds_ibt, params_of_interest, final_params=['usa_wind', 'us
     return Xt, Xt_1
 
 def create_Xt_1_and_Xt_full(ds_ibt, final_params=['usa_wind', 'usa_rmw', 'rmax_ck22', 'usa_r34', 'fcor', 'u_trans', 'v_trans']):
-    print('Creating dataset...')
+    # print('Creating dataset...')
     Xt_1 = [] # shape (n_samples, n_features)
     Xt   = [] # shape (n_samples, n_targets)
     fin_par_with_diff = final_params + ['{}_diff'.format(p) for p in final_params]
@@ -79,8 +79,8 @@ def create_Xt_1_and_Xt_full(ds_ibt, final_params=['usa_wind', 'usa_rmw', 'rmax_c
     Xt   = np.array(Xt)
     
     # Print
-    print('Shape of Xt = {}'.format(Xt.shape))
-    print('Final Parameters = {}'.format(fin_par_with_diff))
+    # print('Shape of Xt = {}'.format(Xt.shape))
+    # print('Final Parameters = {}'.format(fin_par_with_diff))
     
     return Xt, Xt_1
 
