@@ -107,8 +107,7 @@ def get_loglikelihood_vmax(param, x_a, P_a, Y):
             Log_lik_vmax.append(0.5 * A.T@(B@A) - 0.5 * (np.log(2 * np.pi) + SIG[0, 0]))
         except ValueError: # When the value is masked, we add 0
             Log_lik_vmax.append(np.nan)
-      
-    print(SIG)
+            
     return Log_lik_vmax, np.array(x_f), np.array(P_f)
 
 def rmse(X, Y):
