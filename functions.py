@@ -1,5 +1,6 @@
 from tqdm import tqdm
 import numpy as np
+from scipy import optimize
 import matplotlib.pyplot as plt
 import copy
 
@@ -17,6 +18,24 @@ def get_rmax_ck22(Vmax, R17, fcor, intercept, coef1, coef2):
     Mmax    = M_ratio * M17
     Rmax    = (Vmax / fcor) * (np.sqrt(1 + (2 * fcor * Mmax) / (Vmax ** 2)) - 1)
     return Rmax
+
+def ER11_model_ratio(Ck_Cd):
+    return (0.5 * Ck_Cd) ** (1 / (2 - Ck_Cd))
+
+def ER11_subtraction(Ck_Cd, ER11_SAR_ratio):
+    return ER11_model_ratio(Ck_Cd) - ER11_SAR_ratio
+
+def fit_Ck_Cd_eq38(ER11_SAR_ratio):
+    '''Hypothesis of ER11: Rmax >> R17'''
+    sol = optimize.root(
+        ER11_subtraction,
+        x0=np.ones_like(ER11_SAR_ratio) * 0.5, # first variable: Ck_Cd
+        args=ER11_SAR_ratio,                   # fixed parameters
+        method='lm',                           # hybr method doesn't work for ER11_SAR_ratio < 0.3
+        tol=1e-6
+    )
+    Ck_Cd = sol.x
+    return Ck_Cd
 
 def create_Xt_1_and_Xt(ds_ibt, params_of_interest, final_params=['usa_wind', 'usa_rmw', 'usa_r34', 'fcor', 'u_trans', 'v_trans'], fcor_boost=1):
     '''So far, fcor is boosted by 1e6'''
