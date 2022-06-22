@@ -5,6 +5,12 @@ import pandas as pd
 
 ### DATA UTILS
 
+def plot_hist(da, bins=10, density=False):
+    '''Given a xr.DataArray as input, plot the histogram of its values.'''
+    plt.title(da.name, weight='bold')
+    plt.hist(np.array(da).flatten(), bins=bins, density=density);plt.grid();plt.show()
+    return None
+
 def create_dataset(ds_ibt, params_of_interest, PARAMS):
     '''
     ==> STRUCTURE OF X_crrent
