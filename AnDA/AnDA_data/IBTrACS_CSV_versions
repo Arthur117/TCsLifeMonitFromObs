@@ -1,0 +1,8 @@
+*** IBTrACS_V6: 
+- With Rmax_ck22_corrected, to capture the strong de decreasing at the beginning and then the stagnating. 
+
+*** IBTrACS_V5: 
+- All storms go from t34 (=time when storm reached 34 kts) and t_star.
+
+*** IBTrACS_V4: 
+- Uses ds_int, where all storms are calibrated to go from 20 time steps before to t_star (=90% of LMI).
