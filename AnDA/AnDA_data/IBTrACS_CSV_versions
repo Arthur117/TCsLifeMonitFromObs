@@ -1,3 +1,6 @@
+*** IBTrACS_V9:
+- Same as V8, but includes one more column for rmx_ck22
+
 *** IBTrACS_V8:
 - Same as V7;
 - 3 columns added: vmx_obs, rmx_obs and r34_obs, corresponding to all SAR, RAD, SCT observations. For each time step t, the nearest observation in an interval [t - 1.5, t + 1.5] is taken, if it exists. 
