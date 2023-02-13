@@ -68,5 +68,17 @@ def u(r, v, fcor, Cd, K):
     return - ki(r, v, fcor) * v * a2(n)
 
 
+### FOLLOWING ELIASSEN AND LYSTAD 1977
+
+def omega(r, omg_abs, chi, t, Cd=7e-2, H_h=1e4):
+    num = omg_abs * (H_h)
+    den = H_h + omg_abs * (chi ** 2) * Cd * r * t
+    return num / den
+
+def v_evolved(r, v, fcor, chi, t, Cd=7e-2, H_h=1e4):
+    omg   = v / r - fcor
+    omg_t = omega(r, abs(omg), chi, t, Cd, H_h)
+    return (fcor + np.sign(omg) * omg_t) * r
+
 
 
