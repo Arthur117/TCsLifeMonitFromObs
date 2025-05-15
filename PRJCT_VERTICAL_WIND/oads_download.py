@@ -51,6 +51,8 @@ OrbitAndFrame: TypeAlias = str
 DictJSON: TypeAlias = dict
 
 # Constants
+# Custom (otherwise the function "console_exclusive_info" in the loop "for data in file_download_response.iter_content(chunk_size=CHUNK_SIZE_BYTES)" prints every miliseconds a new progress bar, which leads the browser to crash)
+DISPLAY_INTERVAL_SECONDS = 10.0 # nb of seconds between each progress bar printing
 # General script behaviour (can be edited here as required):
 CHUNK_SIZE_BYTES: Final[int] = 256 * 1024 # Represents 256 KB
 MAX_NUM_ORBITS_PER_REQUEST: Final[int] = 50 # Large request are split accoring to this chunk size
@@ -977,20 +979,26 @@ def download(
                                 total_length = int(total_length_str)
                                 start_time = time.time()
                                 progress_bar_length = 30
+                                last_display_time = time.time() ### custom ###
                                 for data in file_download_response.iter_content(chunk_size=CHUNK_SIZE_BYTES): 
                                     current_length += len(data)
                                     f.write(data)
-                                    done = int(progress_bar_length * current_length / total_length)
-                                    time_elapsed = (time.time() - start_time)
-                                    time_estimated = (time_elapsed/current_length) * total_length
-                                    time_left = time.strftime("%H:%M:%S", time.gmtime(int(time_estimated - time_elapsed)))
-                                    progress_bar = f"[{'#' * done}{'-' * (progress_bar_length - done)}]"
-                                    progress_percentage = f"{str(int((current_length / total_length) * 100)).rjust(3)}%"
-                                    elapsed_time = time.time() - start_time
-                                    size_done = current_length / 1024 / 1024
-                                    size_total = total_length / 1024 / 1024
-                                    speed = size_done / elapsed_time if elapsed_time > 0 else 0  # MB/s
-                                    if logger: console_exclusive_info(f"\r {count_msg} {progress_percentage} {progress_bar} {time_left} - {speed:.2f} MB/s - {size_done:.2f}/{size_total:.2f} MB", end='\r')
+                                    current_time = time.time() ### custom ###
+
+                                    if current_time - last_display_time >= DISPLAY_INTERVAL_SECONDS: ### custom ###
+    
+                                        done = int(progress_bar_length * current_length / total_length)
+                                        time_elapsed = (time.time() - start_time)
+                                        time_estimated = (time_elapsed/current_length) * total_length
+                                        time_left = time.strftime("%H:%M:%S", time.gmtime(int(time_estimated - time_elapsed)))
+                                        progress_bar = f"[{'#' * done}{'-' * (progress_bar_length - done)}]"
+                                        progress_percentage = f"{str(int((current_length / total_length) * 100)).rjust(3)}%"
+                                        elapsed_time = time.time() - start_time
+                                        size_done = current_length / 1024 / 1024
+                                        size_total = total_length / 1024 / 1024
+                                        speed = size_done / elapsed_time if elapsed_time > 0 else 0  # MB/s
+                                        if logger: console_exclusive_info(f"\r {count_msg} {progress_percentage} {progress_bar} {time_left} - {speed:.2f} MB/s - {size_done:.2f}/{size_total:.2f} MB", end='\r')
+                                        last_display_time = current_time ### custom ###
                                 time_taken = time.strftime("%H:%M:%S", time.gmtime(int(time.time() - start_time)))
                                 if logger: logger.info(f" {count_msg} Download completed ({time_taken} - {speed:.2f} MB/s - {size_done:.2f}/{size_total:.2f} MB)                   ")
                                 download_sizes.append(size_total)
