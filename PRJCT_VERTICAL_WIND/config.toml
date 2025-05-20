@@ -3,7 +3,7 @@
 data_directory = '/home/arthur/data/tropical_cyclones/earthcare'
 [OADS_credentials]
 username = 'arthur.avenas@polytechnique.org'
-password = """psswd""" # Use triple quotation marks to allow for special characters
+password = """Aaaefm!0""" # Use triple quotation marks to allow for special characters
 # You need to comment out or remove all collections to which you do not have access rights to
 collections = [
     'EarthCAREL0L1Products',      # EarthCARE L0 and L1 Products  ! ONLY FOR COMMISSIONING TEAM USERS !
