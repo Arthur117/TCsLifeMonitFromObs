@@ -1,0 +1,65 @@
+[2025-05-21 15:56:48] [INFO] #============================================================#
+[2025-05-21 15:56:48] [INFO] #          EARTHCARE OADS DOWNLOAD SCRIPT (v3.0.0)           #
+[2025-05-21 15:56:48] [INFO] #============================================================#
+[2025-05-21 15:56:48] [DEBUG] User inputs:
+[2025-05-21 15:56:48] [DEBUG]  - product_types: ['ACMCAP']
+[2025-05-21 15:56:48] [DEBUG]  - path_to_data: None
+[2025-05-21 15:56:48] [DEBUG]  - timestamps: None
+[2025-05-21 15:56:48] [DEBUG]  - frame_ids: None
+[2025-05-21 15:56:48] [DEBUG]  - orbit_numbers: None
+[2025-05-21 15:56:48] [DEBUG]  - orbit_and_frames: ['05107E']
+[2025-05-21 15:56:48] [DEBUG]  - start_time: None
+[2025-05-21 15:56:48] [DEBUG]  - end_time: None
+[2025-05-21 15:56:48] [DEBUG]  - radius_search: None
+[2025-05-21 15:56:48] [DEBUG]  - bounding_box: None
+[2025-05-21 15:56:48] [DEBUG]  - is_download: True
+[2025-05-21 15:56:48] [DEBUG]  - is_unzip: True
+[2025-05-21 15:56:48] [DEBUG]  - is_delete: True
+[2025-05-21 15:56:48] [DEBUG]  - is_overwrite: False
+[2025-05-21 15:56:48] [DEBUG]  - is_create_subdirs: True
+[2025-05-21 15:56:48] [DEBUG]  - product_version: None
+[2025-05-21 15:56:48] [DEBUG]  - path_to_config: None
+[2025-05-21 15:56:48] [DEBUG]  - download_idx: None
+[2025-05-21 15:56:48] [DEBUG]  - start_orbit_number: None
+[2025-05-21 15:56:48] [DEBUG]  - end_orbit_number: None
+[2025-05-21 15:56:48] [DEBUG]  - start_orbit_and_frame: None
+[2025-05-21 15:56:48] [DEBUG]  - end_orbit_and_frame: None
+[2025-05-21 15:56:48] [DEBUG]  - is_log: True
+[2025-05-21 15:56:48] [DEBUG]  - is_debug: False
+[2025-05-21 15:56:48] [DEBUG]  - is_found_files_list_to_txt: False
+[2025-05-21 15:56:48] [DEBUG]  - logger: <Logger oads_download (DEBUG)>
+[2025-05-21 15:56:48] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:56:48] [INFO] | PART 1 - Search products                                   |
+[2025-05-21 15:56:48] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:56:48] [INFO] Setting path_to_config to </home/arthur/scripts/TCsLifeMonitFromObs/PRJCT_VERTICAL_WIND/config.toml>
+[2025-05-21 15:56:48] [INFO] Found config file at </home/arthur/scripts/TCsLifeMonitFromObs/PRJCT_VERTICAL_WIND/config.toml>
+[2025-05-21 15:56:48] [INFO] Number of pending search requests: 1
+[2025-05-21 15:56:48] [INFO] *[1/1] Search request: ACM_CAP_2B, frame=E, orbits=[5107]
+[2025-05-21 15:56:48] [DEBUG]  [1/1] SearchRequest(collection_identifier_list=['EarthCAREL2Products', 'EarthCAREL2InstChecked', 'EarthCAREL2Validated'], product_type='ACM_CAP_2B', product_version=None, radius=None, lat=None, lon=None, bbox=None, start_time=None, end_time=None, orbit_number='[5107]', frame_id='E')
+[2025-05-21 15:56:48] [DEBUG] Entrypoint: https://eocat.esa.int/collections
+[2025-05-21 15:56:48] [DEBUG] Send GET request: https://eocat.esa.int/collections
+[2025-05-21 15:56:49] [DEBUG] Collections queryables: https://eocat.esa.int/eo-catalogue/collections/queryables
+[2025-05-21 15:56:49] [DEBUG] Search for EarthCARE collections: https://eocat.esa.int/collections?&title=earthcare&limit=100
+[2025-05-21 15:56:49] [DEBUG] Send GET request: https://eocat.esa.int/collections?&title=earthcare&limit=100
+[2025-05-21 15:56:49] [DEBUG] Available EarthCARE collections: ['EarthCAREL2Validated', 'EarthCAREXMETL1DProducts10', 'EarthCAREL2Products', 'EarthCAREOrbitData', 'JAXAL2Products', 'JAXAL2InstChecked', 'EarthCAREAuxiliary', 'EarthCAREL1Validated', 'JAXAL2Validated', 'EarthCAREL0L1Products', 'EarthCAREL2InstChecked', 'EarthCAREL1InstChecked']
+[2025-05-21 15:56:49] [DEBUG] Constructed search request URL: https://eocat.esa.int/eo-catalogue/collections/EarthCAREL2Products/items?&limit=2000&frame=E&orbitNumber=[5107]&productType=ACM_CAP_2B
+[2025-05-21 15:56:49] [DEBUG] Send GET request: https://eocat.esa.int/eo-catalogue/collections/EarthCAREL2Products/items?&limit=2000&frame=E&orbitNumber=%7B5107%7D&productType=ACM_CAP_2B
+[2025-05-21 15:56:50] [INFO]  [1/1] Files found in collection 'EarthCAREL2Products': 1
+[2025-05-21 15:56:50] [INFO] List of files found (total number 1):
+[2025-05-21 15:56:50] [DEBUG]  [1]  ECA_EXAB_ACM_CAP_2B_20250422T044057Z_20250422T080150Z_05107E
+[2025-05-21 15:56:50] [INFO] Note: To export this list use the option --export_results
+[2025-05-21 15:56:50] [INFO] Note: To select only one specific file use the option -i/--select_file_at_index
+[2025-05-21 15:56:50] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:56:50] [INFO] | PART 2 - Download products                                 |
+[2025-05-21 15:56:50] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:56:50] [INFO] Selecting dissemination service: ec-pdgs-dissemination2.eo.esa.int
+[2025-05-21 15:56:54] [INFO] *[1/1] Starting: ECA_EXAB_ACM_CAP_2B_20250422T044057Z_20250422T080150Z_05107E
+[2025-05-21 15:56:54] [DEBUG]  [1/1] Requesting: https://ec-pdgs-dissemination2.eo.esa.int/oads/data/EarthCAREL2Products/ECA_EXAB_ACM_CAP_2B_20250422T044057Z_20250422T080150Z_05107E.ZIP
+[2025-05-21 15:57:52] [INFO]  [1/1] Download completed (00:00:58 - 1.05 MB/s - 53.50/62.55 MB)                   
+[2025-05-21 15:57:52] [INFO]  [1/1] File extracted and ZIP-file deleted. (see </home/arthur/data/tropical_cyclones/earthcare/L2b/ACM_CAP_2B/2025/04/22/ECA_EXAB_ACM_CAP_2B_20250422T044057Z_20250422T080150Z_05107E>)
+[2025-05-21 15:57:53] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:57:53] [INFO] | END OF SCRIPT                                              |
+[2025-05-21 15:57:53] [INFO] +------------------------------------------------------------+
+[2025-05-21 15:57:53] [INFO] Execution time:   0 days 00:01:05
+[2025-05-21 15:57:53] [INFO] Files downloaded: 1 (62.55 MB at ~1.05 MB/s)
+[2025-05-21 15:57:53] [INFO] Files unzipped:   1
