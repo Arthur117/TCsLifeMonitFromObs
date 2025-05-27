@@ -20,5 +20,9 @@ i.e look at VWS before;
 
 - test_asymmetry_kepert: asymmetry diagnostics from Kepert 2001 only;
 
-- apply_K25: most advanced notebook containing the up-to-date Kepert 2025 functions and the up-to-date dropsondes functions;
+- apply_K25: notebook containing the non-vectorized Kepert 2025 functions and the up-to-date dropsondes functions;
+
+- lee_K25: mot up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure
+
+
 
