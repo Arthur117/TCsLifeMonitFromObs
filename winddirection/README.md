@@ -14,7 +14,7 @@ i.e look at VWS before;
 
 - bebinca, bheki1, bheki2, leslie, usagi: tests with Kepert and IWRAP;
 
-- larry_z: most advanced notebook containing the up-do-date Kepert 2001 functions, and some tests with IWRAP and EarthCARE;
+- larry_z: most advanced notebook containing the up-do-date (non-vectorized) Kepert 2001 functions, and some tests with IWRAP and EarthCARE;
 
 - test_asymmetry_windshear: asymmetry diagnostics from SAR only;
 
@@ -22,7 +22,7 @@ i.e look at VWS before;
 
 - apply_K25: notebook containing the non-vectorized Kepert 2025 functions and the up-to-date dropsondes functions;
 
-- lee_K25: mot up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure
+- lee_K25: mot up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure (which I probably won't use). Also contains the way to estimate an average Cd independently (from the wind profile).
 
 
 
