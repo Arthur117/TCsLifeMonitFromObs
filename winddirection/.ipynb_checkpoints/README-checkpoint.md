@@ -22,7 +22,7 @@ i.e look at VWS before;
 
 - apply_K25: notebook containing the non-vectorized Kepert 2025 functions and the up-to-date dropsondes functions;
 
-- lee_K25: mot up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure (which I probably won't use). Also contains the way to estimate an average Cd independently (from the wind profile).
+- lee_K25: mot up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure (which I probably won't use). Also contains the way to estimate an average Cd independently (from the wind profile). Function get_wn1() was later updated in notebook 00_FIT_K25.ipynb
 
 
 
