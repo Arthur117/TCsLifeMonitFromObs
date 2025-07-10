@@ -24,5 +24,7 @@ i.e look at VWS before;
 
 - lee_K25: most up-to-date notebook containing the vectorized Kepert 2025 functions and the up-to-date dropsondes functions; Also contains the fitting procedure (which I probably won't use). Also contains the way to estimate an average Cd independently (from the wind profile). Function get_wn1() was later updated in notebook 00_FIT_K25.ipynb
 
+- 00_Test_Figs_K01_vectorized_z: most up-to-date notebook containing the vectorized Kepert 2001 functions. CAVEAT: before copy-pasting, don't forget to add the correction factor to convert Vs to Vs_try, and probably also add Ut to output observed winds (rather than storm-relative).
+
 
 
